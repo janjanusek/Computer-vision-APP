@@ -1,0 +1,229 @@
+﻿<UserControl x:Class="ImageClassifierApp.Controls.Builder.NetBuilderUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ImageClassifierApp.Controls.Builder"
+             xmlns:netModel="clr-namespace:ImageClassifierApp.Models.NetModel"
+             xmlns:layerModelFormular="clr-namespace:ImageClassifierApp.Controls.LayerModelFormular"
+             xmlns:converters="clr-namespace:ImageClassifierApp.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="800"
+             Background="{StaticResource VeryLightGray}"
+             Visibility="{Binding Converter={StaticResource NullVisibilityConverter}}"
+             Padding="5"
+             x:Name="UserControl">
+
+    <d:NetBuilderUserControl.DataContext>
+        <netModel:NetModelBaseDesign />
+    </d:NetBuilderUserControl.DataContext>
+
+    <UserControl.Resources>
+        <converters:NetModelLayerToBrush x:Key="LayerToBrush" />
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"
+                              MinWidth="410" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Background="{StaticResource VeryLightGray}"
+              Margin="0,5,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Grid.Row="0"
+                       Margin="5"
+                       Text="Net model name: " />
+            <TextBox Grid.Column="1"
+                     Grid.Row="0"
+                     IsReadOnly="{Binding CanBeChanged, Converter={StaticResource BoolInvertorConverter}}"
+                     Margin="5"
+                     MaxLength="30"
+                     HorizontalAlignment="Stretch"
+                     TextAlignment="Center"
+                     Text="{Binding ModelName, Mode=TwoWay}" />
+            <TextBlock Text="data set info: "
+                       Grid.Row="1"
+                       Grid.Column="0"
+                       Grid.ColumnSpan="2"
+                       Visibility="{Binding Converter={StaticResource ClassNameToVisibilityConverter}, ConverterParameter=TrainedNetModel}"
+                       Margin="5">
+                    <Run Text="{Binding DataSetMetaData.Description, Mode=OneWay}" />
+            </TextBlock>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="5">
+                <TextBlock Text="layer "
+                           VerticalAlignment="Center" />
+                <ComboBox x:Name="SupportedComboBox"
+                          ItemsSource="{Binding SupportedLayers, Mode=OneWay}"
+                          SelectedIndex="0"
+                          IsReadOnly="{Binding CanBeChanged}"
+                          VerticalAlignment="Stretch"
+                          Background="Transparent"
+                          MinWidth="300"
+                          Text="select type of layer"
+                          HorizontalContentAlignment="Stretch">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <TextBlock Text="{Binding Name}"
+                                           HorizontalAlignment="Stretch"
+                                           Margin="5" />
+                                <Rectangle RadiusY="5"
+                                           RadiusX="5" 
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Fill="{Binding Converter={StaticResource LayerToBrush}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button FontSize="15"
+                        IsEnabled="{Binding CanBeChanged}"
+                        Margin="5,0"
+                        Background="{StaticResource DarkBlue}"
+                        Foreground="LightGray"
+                        VerticalAlignment="Stretch"
+                        Width="50"
+                        Click="AddLayer"
+                        Tag="{Binding ElementName=SupportedComboBox, Path=SelectedItem}">
+                    <Button.Content>
+                        <TextBlock Text="add"
+                                   Margin="5,2"
+                                   Foreground="{StaticResource VeryLightGray}" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+
+
+        <Grid Grid.Column="0"
+              Grid.Row="1"
+              Margin="10,5,0,0"
+              Background="{StaticResource VeryLightGray}">
+
+
+        </Grid>
+        <Grid Grid.Row="2"
+              Grid.Column="0"
+              HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Margin="0,5,0,0"
+              Background="{StaticResource VeryLightGray}">
+            <ListView x:Name="LayersListView"
+                      Background="Transparent"
+                      BorderThickness="0"
+                      HorizontalContentAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      AlternationCount="2"
+                      ItemsSource="{Binding Layers}"
+                      Margin="0,5">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="netModel:LayerInfo">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Rectangle HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       RadiusY="15"
+                                       RadiusX="15"
+                                       Height="80"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       DataContext="{Binding Converter={StaticResource LayerToBrush}}">
+                                <Rectangle.Fill>
+                                    <SolidColorBrush Color="{Binding Path=Color}" />
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Grid Column="0"
+                                  Margin="10,0"
+                                  VerticalAlignment="Center">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0"
+                                           Text="type: ">
+                                    <Run Text="{Binding Name, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Grid.Row="1"
+                                           Visibility="{Binding XamlValue1, Converter={StaticResource NullVisibilityConverter}}"
+                                           Text="description: "
+                                           FontSize="12">
+                                    <Run Text="{Binding XamlValue1, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock Grid.Row="2"
+                                           Text="detail: "
+                                           FontSize="12"
+                                           Visibility="{Binding XamlValue2, Converter={StaticResource NullVisibilityConverter}}">
+                                    <Run Text="{Binding XamlValue2, Mode=OneWay}" />
+                                </TextBlock>
+                            </Grid>
+                            <Button Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Tag="{Binding}"
+                                    Margin="10"
+                                    Click="RemoveLayerClick"
+                                    Visibility="{Binding CanBeChanged, Converter={StaticResource BoolToVisibilityConverter}}">
+                                <Grid>
+                                    <Ellipse Width="30"
+                                             Height="30"
+                                             Fill="{StaticResource DarkBlue}" />
+                                    <TextBlock Text="&#xE711;"
+                                               FontFamily="Segoe MDL2 assets"
+                                               FontSize="20"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Foreground="{StaticResource VeryLightGray}" />
+                                </Grid>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <StackPanel Grid.Column="1"
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Margin="5"
+                    MinWidth="380"
+                    Visibility="{Binding Converter={StaticResource NullVisibilityConverter}}">
+            <TextBlock Text="Layer info:"
+                       Style="{StaticResource Headline}"
+                       FontWeight="Normal"
+                       Margin="0,0,0,50" />
+            <layerModelFormular:LayerModelFormularUserControl Background="{StaticResource VeryLightGray}"
+                                                              DataContext="{Binding ElementName=LayersListView, Path=SelectedItem}" />
+        </StackPanel>
+    </Grid>
+</UserControl>
+
+<!--DataContext="{Binding ElementName=LayersListView, Path=SelectedItem}"-->

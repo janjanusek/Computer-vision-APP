@@ -1,0 +1,59 @@
+﻿<Window x:Class="ImageClassifierApp.Views.CreateNetModelWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageClassifierApp.Views"
+        xmlns:netModel="clr-namespace:ImageClassifierApp.Models.NetModel"
+        xmlns:builder="clr-namespace:ImageClassifierApp.Controls.Builder"
+        xmlns:notifications="clr-namespace:ImageClassifierApp.Controls.Notifications"
+        xmlns:commands="clr-namespace:ImageClassifierApp.Commands"
+        mc:Ignorable="d"
+        Title="plain net model creator"
+        MinHeight="720"
+        MinWidth="1280"
+        Height="Auto"
+        Width="Auto"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize">
+
+    <Window.DataContext>
+        <netModel:NetModelCreator />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Background="{StaticResource LightGray}">
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="5">
+                <Button Padding="5"
+                        CommandParameter="{Binding}">
+                    <Button.Command>
+                        <commands:SaveNetModelCommand />
+                    </Button.Command>
+                    <Button.Content>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="&#xE74E;"
+                                       HorizontalAlignment="Center"
+                                       FontFamily="Segoe MDL2 Assets"
+                                       FontSize="25" />
+                            <TextBlock Text="save model"
+                                       FontSize="15" />
+                        </StackPanel>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <builder:NetBuilderUserControl Grid.Row="1"
+                                       DataContext="{Binding}" />
+
+        <notifications:NotificationsUserControl Grid.Row="0"
+                                                Grid.RowSpan="2" />
+    </Grid>
+</Window>

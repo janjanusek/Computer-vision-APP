@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="ImageClassifierApp.Controls.Testing.BatchTesterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ImageClassifierApp.Controls.Testing"
+             xmlns:viewModels="clr-namespace:ImageClassifierApp.ViewModels"
+             xmlns:classification="clr-namespace:ImageClassifierApp.Models.Classification"
+             xmlns:testing="clr-namespace:ImageClassifierApp.ViewModels.Testing"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="800"
+             Background="{StaticResource VeryLightGray}">
+
+    <UserControl.DataContext>
+        <testing:TestingViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" 
+                                  MaxWidth="350"/>
+
+                <ColumnDefinition Width="*"
+                                  MinWidth="250" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0"
+                        VerticalAlignment="Center">
+                <TextBlock Text="model name: ">
+                    <Run Text="{Binding StateHandler.ModelName, Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock Text="dataset info: "
+                           FontSize="15">
+                    <Run Text="{Binding StateHandler.DataSetMetaData.Description, Mode=OneWay}" />
+                </TextBlock>
+                <TextBlock Text="success ratio: "
+                           FontSize="15">
+                    <Run Text="{Binding StateHandler.SuccessRatio, Mode=OneWay}" /> %
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="15,0,25,0">
+                <TextBlock Text="compatible data sets:"
+                           Margin="10,0"
+                           VerticalAlignment="Center"/>
+                <ComboBox x:Name="SupportedDataSetsComboBox" MinWidth="200"
+                          ItemsSource="{Binding SupportedDataSets}"
+                          SelectedItem="{Binding TestingDataSet, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="classification:DataSetModel">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <Button Grid.Column="2"
+                    Margin="0,15,0,15"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Background="{StaticResource DarkBlue}"
+                    Click="OnTestNetwork">
+                <TextBlock Text="test neural network"
+                           Margin="5"
+                           Foreground="{StaticResource VeryLightGray}" />
+            </Button>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+
+            <Grid Grid.Row="1"
+                  Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+
+                <Grid Grid.Row="0"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Height="30"
+                      Background="{StaticResource Gray}">
+
+                    <TextBlock Text="Guess"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center" />
+                </Grid>
+                <Grid Grid.Row="0"
+                      Grid.Column="0"
+                      Grid.RowSpan="2"
+                      Width="30"
+                      Background="{StaticResource Gray}">
+                    <TextBlock Text="Real"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               RenderTransformOrigin="0.5,0.5">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform />
+                                <SkewTransform />
+                                <RotateTransform Angle="-90" />
+                                <TranslateTransform />
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                </Grid>
+                <ScrollViewer Grid.Row="1"
+                              Grid.Column="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Auto">
+                    <Grid x:Name="ConfusionMatrix">
+
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+
+</UserControl>
