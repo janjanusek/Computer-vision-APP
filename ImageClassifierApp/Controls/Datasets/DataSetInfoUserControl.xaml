@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="ImageClassifierApp.Controls.Datasets.DataSetInfoUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ImageClassifierApp.Controls.Datasets"
+             xmlns:classification="clr-namespace:ImageClassifierApp.Models.Classification"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="800"
+             Background="{StaticResource VeryLightGray}"
+             Padding="5"
+             x:Name="UserControl">
+
+    <d:UserControl.DataContext>
+        <classification:DataSetModel />
+    </d:UserControl.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Text="Category:"
+                           Foreground="{StaticResource DarkBlue}" />
+                <ComboBox x:Name="CategoryComboBox"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          MinWidth="100"
+                          MaxWidth="120"
+                          DataContext="{Binding}"
+                          ItemsSource="{Binding FileCategories}"
+                          SelectedIndex="0"
+                          Margin="10">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="classification:FileCategory">
+                            <TextBlock Text="{Binding CategoryName}"
+                                       Foreground="{StaticResource DarkBlue}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <StackPanel Margin="10,0,0,0">
+                    <TextBlock Text="Name: ">
+                        <Run Text="{Binding Name}" />
+                    </TextBlock>
+                    <TextBlock Text="info: ">
+                        <Run Text="{Binding MetaData.Description, Mode=OneWay}" />
+                        <Run Text=", count: " />
+                        <Run Text="{Binding Length, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+            <Separator Background="{StaticResource DarkBlue}"
+                       HorizontalAlignment="Stretch" />
+        </StackPanel>
+
+        <ListBox x:Name="PhotosListBox"
+                 Grid.Row="1"
+                 Background="Transparent"
+                 AlternationCount="2"
+                 BorderThickness="0"
+                 Padding="0,10,0,0"
+                 SelectionMode="Extended"
+                 VirtualizingPanel.IsContainerVirtualizable="True"
+                 VirtualizingPanel.IsVirtualizing="True"
+                 VirtualizingPanel.VirtualizationMode="Recycling"
+                 VirtualizingPanel.CacheLengthUnit="Page"
+                 VirtualizingPanel.CacheLength="2,2"
+                 DataContext="{Binding ElementName=CategoryComboBox, Path=SelectedItem}"
+                 ItemsSource="{Binding CategoryFiles}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="classification:FileInfo">
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch"
+                              Background="{StaticResource DarkBlue}">
+                        </Grid>
+                        <Image Grid.Column="0"
+                               DataContextChanged="FrameworkElement_OnDataContextChanged"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Stretch">
+                            <Image.Source>
+                                <MultiBinding Converter="{StaticResource ImageResizeConverter}"
+                                              Mode="OneWay">
+                                    <Binding ElementName="UserControl" Path="DataContext"/>
+                                    <Binding Path="FilePath"/>
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                        <Grid Grid.Column="1"
+                              Margin="10">
+                            <TextBlock Text="File name: "
+                                       FontWeight="Normal"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Foreground="{StaticResource DarkBlue}">
+                                <Run Text="{Binding FileName, Mode=OneWay}" />
+                            </TextBlock>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

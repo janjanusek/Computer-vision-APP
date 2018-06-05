@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ImageClassifierApp.Models.NetModel.LayerInfo">
+    <Position X="5.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Events" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAIAAACIgAAAAASIoAAAgSAhAAAAUAEAAIAEAAAEBA=</HashCode>
+      <FileName>Models\NetModel\LayerInfo.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ImageClassifierApp.Models.NetModel.NetModelBase">
+    <Position X="2.75" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQKAAAAAAABIBCAAAAggAACAAAEIAAAECgAAAA=</HashCode>
+      <FileName>Models\NetModel\NetModelBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ImageClassifierApp.Models.NetModel.NetModelCreator" Collapsed="true">
+    <Position X="1" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAQAAAABAAAAAAAAAgAAEgAAAEAAAAAA=</HashCode>
+      <FileName>Models\NetModel\NetModelCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageClassifierApp.Models.NetModel.PlainNetModel" Collapsed="true">
+    <Position X="5.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAACAAAEAAAAEAAAAAA=</HashCode>
+      <FileName>Models\NetModel\PlainNetModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ImageClassifierApp.Models.Training.TrainedNetModel" Collapsed="true">
+    <Position X="3.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAAAAAAAAACAAAEAAAAAAAQAAA=</HashCode>
+      <FileName>Models\Training\TrainedNetModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="ImageClassifierApp.Models.NetModel.IModelVisualizer">
+    <Position X="1" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Models\NetModel\NetModelCreator.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

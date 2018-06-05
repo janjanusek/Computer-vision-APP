@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="ImageClassifierApp.Controls.DragAndDrop.DragAndDropControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             x:Name="DragAndDrop"
+             Foreground="{StaticResource LighBlue}"
+             Background="{StaticResource VeryLightGray}"
+             DataContext="Drop files here or right click"
+             MinWidth="200"
+             MinHeight="200">
+
+    <Grid>
+        <Grid AllowDrop="True"
+              Drop="DragAndDropControl_OnDrop"
+              MouseRightButtonUp="LoadFiles">
+            <Rectangle HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       Margin="10"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Foreground}" />
+
+            <Rectangle HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       Margin="20"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Background}" />
+
+            <Rectangle HorizontalAlignment="Left"
+                       VerticalAlignment="Stretch"
+                       Margin="5,80"
+                       Width="20"
+                       Stroke="Transparent"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Background}" />
+
+            <Rectangle HorizontalAlignment="Right"
+                       VerticalAlignment="Stretch"
+                       Margin="5,80"
+                       Width="20"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Background}" />
+            <Rectangle HorizontalAlignment="Stretch"
+                       VerticalAlignment="Top"
+                       Margin="80,5"
+                       Height="20"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Background}" />
+            <Rectangle HorizontalAlignment="Stretch"
+                       VerticalAlignment="Bottom"
+                       Margin="80,5"
+                       Height="20"
+                       Fill="{Binding ElementName=DragAndDrop, Path=Background}" />
+            <TextBlock Text="{Binding ElementName=DragAndDrop, Path=DataContext}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Margin="25,15"
+                       Foreground="{Binding ElementName=DragAndDrop, Path=TitleBrush}" />
+
+        </Grid>
+        <Grid HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch"
+              Background="{StaticResource LightGray}"
+              x:Name="IsProcessingFiles"
+              Visibility="Collapsed">
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <controls:ProgressRing Foreground="{StaticResource DarkBlue}" />
+                <TextBlock Text="processing files"
+                           Margin="0,5" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

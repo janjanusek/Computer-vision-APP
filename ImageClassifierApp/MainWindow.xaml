@@ -1,0 +1,173 @@
+﻿<Window x:Class="ImageClassifierApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageClassifierApp"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:viewModels="clr-namespace:ImageClassifierApp.ViewModels"
+        xmlns:buttons="clr-namespace:ImageClassifierApp.Controls.Buttons"
+        xmlns:notifications="clr-namespace:ImageClassifierApp.Controls.Notifications"
+        mc:Ignorable="d"
+        Title="AI TOOL"
+        MinHeight="720"
+        MinWidth="1280"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        BorderBrush="{StaticResource Gray}"
+        Background="{StaticResource VeryLightGray}">
+
+    <Window.DataContext>
+        <viewModels:MainViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0"
+              Background="{StaticResource DarkBlue}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="50" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0"
+                           Text="Bc. Ján Janušek"
+                           FontSize="16"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Opacity="0.6"
+                           Foreground="{StaticResource Gray}" />
+
+                <Grid Grid.Row="1"
+                      Background="{StaticResource LighBlue}">
+                    <TextBlock Text="AI-"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Style="{StaticResource Headline}">
+                        <Run Text="TOOL"
+                             FontWeight="Bold" />
+                    </TextBlock>
+                </Grid>
+                <TextBlock Grid.Row="2"
+                           Text="GC allocated: "
+                           Foreground="{StaticResource LighBlue}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    <Run Text="{Binding HeapAllocated}" /> MB
+                </TextBlock>
+                <ListView Grid.Row="3"
+                          Background="Transparent"
+                          ItemsSource="{Binding ViewModels}"
+                          VerticalAlignment="Center"
+                          HorizontalAlignment="Stretch"
+                          BorderThickness="0"
+                          SelectedItem="{Binding CurrentPartialViewModel, Mode=TwoWay}"
+                          SelectionChanged="Selector_OnSelectionChanged">
+                    <ListView.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Style.Resources>
+                                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                                 Color="Transparent" />
+                            </Style.Resources>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch"></Setter>
+                            <Setter Property="BorderThickness"
+                                    Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center"
+                                        Margin="15"
+                                        Opacity="0.5">
+                                <TextBlock Text="{Binding Title}"
+                                           HorizontalAlignment="Right"
+                                           Foreground="{StaticResource LightGray}" />
+                                <Rectangle Height="1"
+                                           Opacity="0.5"
+                                           HorizontalAlignment="Stretch"
+                                           Margin="-5,1"
+                                           Stroke="{StaticResource LightGray}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="{Binding CurrentPartialViewModel.Title, Converter={StaticResource TitleConverter}}"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Foreground="Black"
+                       Opacity="0.6"
+                       Margin="80,0,0,0"
+                       FontWeight="Normal" />
+
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Margin="15,0">
+                <ListView BorderThickness="0"
+                          Margin="5,0"
+                          ItemsSource="{Binding CurrentPartialViewModel.SupportedButtons}"
+                          Background="Transparent">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate DataType="buttons:ButtonModel">
+                            <ContentControl Content="{Binding Button}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackPanel>
+
+            <Grid Grid.Row="1"
+                  Background="{StaticResource LightGray}">
+                <ContentControl Content="{Binding View}"
+                                DataContext="{Binding CurrentPartialViewModel}"
+                                Margin="15"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch" />
+                <Grid HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="{StaticResource Gray}"
+                      Visibility="{Binding CurrentPartialViewModel.IsWorking , Converter={StaticResource BoolToVisibilityConverter}}">
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <mah:ProgressRing IsActive="{Binding CurrentPartialViewModel.IsWorking}" Foreground="{StaticResource DarkBlue}"/>
+                        <TextBlock Margin="0,5" Text="Long running operation is in progress."
+                                   FontSize="12"/>
+                        <TextBlock Text="please wait..."
+                                   HorizontalAlignment="Center"
+                                   FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <notifications:NotificationsUserControl Grid.Column="0"
+                                                Grid.Row="0"
+                                                Grid.ColumnSpan="2" />
+    </Grid>
+</Window>

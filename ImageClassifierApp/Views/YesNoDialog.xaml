@@ -1,0 +1,53 @@
+﻿<Window x:Class="ImageClassifierApp.Views.YesNoDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageClassifierApp.Views"
+        mc:Ignorable="d"
+        Title="Question"
+        Height="200"
+        Width="400"
+        ResizeMode="NoResize"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
+        Background="{StaticResource LightGray}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <TextBlock Text="{Binding Message}"
+                       Foreground="{StaticResource DarkBlue}"
+                       Margin="5"
+                       TextWrapping="Wrap" />
+        </ScrollViewer>
+
+        <Grid Grid.Row="1"
+              HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Background="{StaticResource DarkBlue}"
+                    Margin="5"
+                    Grid.Column="0"
+                    Click="OnYesClick">
+                <TextBlock Text="yes"
+                           Foreground="{StaticResource VeryLightGray}"
+                           Margin="5,2" />
+            </Button>
+            <Button Background="{StaticResource DarkBlue}"
+                    Margin="5"
+                    Grid.Column="1"
+                    Click="OnNoClick">
+                <TextBlock Text="no"
+                           Foreground="{StaticResource VeryLightGray}"
+                           Margin="5,2" />
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
